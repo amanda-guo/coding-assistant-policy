@@ -1,6 +1,11 @@
 # Passes the schema but should fail the guardrail rules.
 version: 1
 name: broken-rules
+mcp:
+  allowed_servers:
+    - name: internal-docs
+      owner: developer-experience
+      review_date: "2026-10-01"
 assistants:
   github_copilot:
     enabled: true

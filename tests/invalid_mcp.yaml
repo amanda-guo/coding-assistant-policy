@@ -1,0 +1,28 @@
+# Should fail MCP rules: each allowed server needs an owner and an ISO review date.
+version: 1
+name: broken-mcp
+mcp:
+  allowed_servers:
+    - name: server-without-owner
+      review_date: "2026-10-01"
+    - name: server-without-review-date
+      owner: platform-security
+    - name: server-with-invalid-review-date
+      owner: application-security
+      review_date: "not-a-date"
+assistants:
+  github_copilot:
+    enabled: true
+    rollout_stage: general_availability
+    features:
+      code_completion: true
+      chat: true
+      cli: true
+      agent_mode: false
+      public_code_matching: block
+    models:
+      allowed: [gpt-4.1]
+      default: gpt-4.1
+    excluded_paths:
+      - "**/.env*"
+      - "**/secrets/**"

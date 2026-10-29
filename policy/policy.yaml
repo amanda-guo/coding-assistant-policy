@@ -2,6 +2,15 @@
 version: 1
 name: example-coding-assistant-policy
 
+mcp:
+  allowed_servers:
+    - name: internal-docs
+      owner: developer-experience
+      review_date: "2026-10-01"
+    - name: security-scanner
+      owner: application-security
+      review_date: "2026-10-15"
+
 assistants:
   github_copilot:
     enabled: true

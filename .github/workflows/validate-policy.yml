@@ -28,6 +28,7 @@ jobs:
         run: |
           ! python scripts/validate_policy.py tests/invalid_schema.yaml
           ! python scripts/validate_policy.py tests/invalid_rules.yaml
+          ! python scripts/validate_policy.py tests/invalid_mcp.yaml
 
   validate-terraform:
     runs-on: ubuntu-latest

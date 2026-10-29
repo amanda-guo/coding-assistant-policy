@@ -10,6 +10,7 @@ Exit code 0 = valid, 1 = invalid, 2 = could not read input.
 import argparse
 import json
 import sys
+from datetime import date
 from pathlib import Path
 
 import yaml
@@ -33,6 +34,25 @@ def validate_schema(policy: dict, schema: dict) -> list[str]:
 
 def validate_rules(policy: dict) -> list[str]:
     errors = []
+    for server in policy["mcp"]["allowed_servers"]:
+        name = server["name"]
+        owner = server.get("owner", "")
+        if not owner.strip():
+            errors.append(f"rule: mcp: allowed server '{name}' must have a non-empty owner")
+
+        review_date = server.get("review_date", "")
+        if not review_date.strip():
+            errors.append(f"rule: mcp: allowed server '{name}' must have a review_date")
+        else:
+            try:
+                parsed_date = date.fromisoformat(review_date)
+                if parsed_date.isoformat() != review_date:
+                    raise ValueError
+            except ValueError:
+                errors.append(
+                    f"rule: mcp: allowed server '{name}' review_date must use YYYY-MM-DD format"
+                )
+
     for name, cfg in policy["assistants"].items():
         models = cfg["models"]
         if models["default"] not in models["allowed"]:

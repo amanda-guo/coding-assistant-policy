@@ -1,6 +1,8 @@
 # Should fail the schema check: unknown assistant, bad types, missing fields.
 version: 1
 name: broken-structure
+mcp:
+  allowed_servers: []
 assistants:
   some_other_tool:
     enabled: true
