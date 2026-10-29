@@ -1,0 +1,5 @@
+.terraform/
+*.tfstate*
+terraform/rendered/
+__pycache__/
+.DS_Store

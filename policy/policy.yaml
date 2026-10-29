@@ -1,0 +1,39 @@
+# Mock enterprise policy for AI coding assistants. Illustrative only.
+version: 1
+name: example-coding-assistant-policy
+
+assistants:
+  github_copilot:
+    enabled: true
+    rollout_stage: general_availability
+    features:
+      code_completion: true
+      chat: true
+      cli: true
+      agent_mode: false
+      public_code_matching: block   # allow | block
+    models:
+      allowed: [gpt-4.1, claude-sonnet-4]
+      default: gpt-4.1
+    excluded_paths:
+      - "**/.env*"
+      - "**/secrets/**"
+      - "**/*.pem"
+      - "infra/prod/**"
+
+  claude_code:
+    enabled: true
+    rollout_stage: pilot
+    features:
+      code_completion: false
+      chat: true
+      cli: true
+      agent_mode: true
+      public_code_matching: block
+    models:
+      allowed: [claude-sonnet-4]
+      default: claude-sonnet-4
+    excluded_paths:
+      - "**/.env*"
+      - "**/secrets/**"
+      - "**/*.pem"

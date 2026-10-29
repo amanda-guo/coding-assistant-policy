@@ -1,0 +1,18 @@
+# Passes the schema but should fail the guardrail rules.
+version: 1
+name: broken-rules
+assistants:
+  github_copilot:
+    enabled: true
+    rollout_stage: general_availability
+    features:
+      code_completion: true
+      chat: true
+      cli: true
+      agent_mode: true
+      public_code_matching: allow
+    models:
+      allowed: [gpt-4.1]
+      default: some-unlisted-model
+    excluded_paths:
+      - "**/*.pem"

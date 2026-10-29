@@ -1,0 +1,59 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Coding assistant policy",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["version", "name", "assistants"],
+  "properties": {
+    "version": { "const": 1 },
+    "name": { "type": "string", "minLength": 1 },
+    "assistants": {
+      "type": "object",
+      "minProperties": 1,
+      "propertyNames": { "enum": ["github_copilot", "claude_code"] },
+      "additionalProperties": { "$ref": "#/$defs/assistant" }
+    }
+  },
+  "$defs": {
+    "assistant": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["enabled", "rollout_stage", "features", "models", "excluded_paths"],
+      "properties": {
+        "enabled": { "type": "boolean" },
+        "rollout_stage": { "enum": ["pilot", "general_availability"] },
+        "features": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["code_completion", "chat", "cli", "agent_mode", "public_code_matching"],
+          "properties": {
+            "code_completion": { "type": "boolean" },
+            "chat": { "type": "boolean" },
+            "cli": { "type": "boolean" },
+            "agent_mode": { "type": "boolean" },
+            "public_code_matching": { "enum": ["allow", "block"] }
+          }
+        },
+        "models": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["allowed", "default"],
+          "properties": {
+            "allowed": {
+              "type": "array",
+              "minItems": 1,
+              "uniqueItems": true,
+              "items": { "type": "string", "minLength": 1 }
+            },
+            "default": { "type": "string", "minLength": 1 }
+          }
+        },
+        "excluded_paths": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "type": "string", "minLength": 1 }
+        }
+      }
+    }
+  }
+}

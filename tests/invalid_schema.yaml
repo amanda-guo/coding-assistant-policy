@@ -1,0 +1,15 @@
+# Should fail the schema check: unknown assistant, bad types, missing fields.
+version: 1
+name: broken-structure
+assistants:
+  some_other_tool:
+    enabled: true
+  github_copilot:
+    enabled: "yes"
+    rollout_stage: everyone
+    features:
+      chat: true
+    models:
+      allowed: []
+      default: gpt-4.1
+    excluded_paths: []

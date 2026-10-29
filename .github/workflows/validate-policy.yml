@@ -1,0 +1,41 @@
+name: Validate policy
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  validate-policy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - run: pip install -r requirements.txt
+
+      - name: Validate policy
+        run: python scripts/validate_policy.py
+
+      - name: Confirm known-bad policies are rejected
+        run: |
+          ! python scripts/validate_policy.py tests/invalid_schema.yaml
+          ! python scripts/validate_policy.py tests/invalid_rules.yaml
+
+  validate-terraform:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: hashicorp/setup-terraform@v3
+
+      - run: terraform -chdir=terraform fmt -check
+      - run: terraform -chdir=terraform init -backend=false
+      - run: terraform -chdir=terraform validate
